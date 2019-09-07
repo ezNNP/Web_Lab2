@@ -1,4 +1,4 @@
-<%--
+<%@ page import="app.model.Results" %><%--
   Created by IntelliJ IDEA.
   User: grigoriy
   Date: 2019-09-06
@@ -6,19 +6,23 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+  // add refresh (Results.getInstance().clearList();)
+  // add clicking on canvas with R
+%>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Лаба 1</title>
   <!-- Подключение css -->
-  <link href="style.css" rel="stylesheet">
-  <link href="result.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/result.css" rel="stylesheet">
   <!-- Подключение JS -->
-  <script type="text/javascript" src="form_handler.js"></script>
-  <script type="text/javascript" src="result_shower.js"></script>
-  <script type="text/javascript" src="canvas_drawer.js"></script>
+  <script type="text/javascript" src="js/form_handler.js"></script>
+  <script type="text/javascript" src="js/result_shower.js"></script>
+  <script type="text/javascript" src="js/canvas_drawer.js"></script>
 </head>
-<body onload="cl(); loadCanvas(); validateCounter(counter_of_model); resizeIframe()">
+<body onload="cl(); loadCanvas(); validateCounter(<% out.print(Results.getInstance().listSize() + 2); %>); resizeIframe()">
 <!-- Шапка -->
 <div class="content">
   <div class="header block">
@@ -28,7 +32,7 @@
   </div>
   <div class="container block">
     <p>Введите X, Y, R в полях ниже и узнайте, попала ли точка в фигуру, сгенерированную генератором генерируемых вариантов</p>
-    <form id="form" action="/controller" method="get" target="result">
+    <form id="form" action="controller" method="post" target="result">
       <div id="X" class="prop">
         <span class="property">X</span>
         <span id="x_buttons">
@@ -42,7 +46,7 @@
           <button id="x3" type="button" onclick="chooseX(3)">3</button>
           <button id="x4" type="button" onclick="chooseX(4)">4</button>
         </span>
-        <input id="X_input" name="x" class="hidden" hidden="true">
+        <input id="X_input" name="x" class="hidden">
       </div>
       <div id="Y" class="prop">
         <span class="property">Y</span>
@@ -57,15 +61,15 @@
           <button id="r4" type="button" onclick="chooseR(4)">4</button>
           <button id="r5" type="button" onclick="chooseR(5)">5</button>
         </span>
-        <input id="R_input" name="r" class="hidden" hidden="true">
+        <input id="R_input" name="r" class="hidden">
       </div>
       <button type="submit" id="submit" disabled onclick="drawPoint(); showResult(); resizeIframe()">Чекнуть</button>
     </form>
     <canvas width="300" height="300" id="canvas"></canvas>
   </div>
-  <div id="result" class="block (hide or not)">
-  <iframe src="show_result.php" name="result" frameBorder="0" seamless scrolling="no" id="iframe"></iframe>
-  <a href="index.php?refresh=1">Начать заново</a>
+  <div id="result" class="block <% if (Results.getInstance().listSize() == 0) { out.print("hidden"); }%>">
+  <iframe src="result.jsp" name="result" frameBorder="0" seamless scrolling="no" id="iframe"></iframe>
+  <a href="index.jsp?ref=1">Начать заново</a>
 </div>
 </div>
 </body>

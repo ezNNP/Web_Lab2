@@ -1,25 +1,22 @@
 package app.entities;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Point {
+public class Point implements Serializable {
     private int x;
     private float y;
     private int r;
-    private String creationDateString;
-    private long workingTime;
-    private boolean result;
+    private String creationDateString; // дата создания точки
+    private String workingTime; // время работы
+    private boolean result; // реузльтат | true - точка попала в область | false - не попала
+    private boolean correct; // корректно ли были заданы значения для точки
 
-    public Point(int x, float y, int r, boolean result, Date startOfWorking) {
-        this.x = x;
-        this.y = y;
-        this.r = r;
-        this.result = result;
+    public Point() {
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         this.creationDateString = simpleDateFormat.format(date);
-        this.workingTime = date.getTime() - startOfWorking.getTime();
     }
 
     public int getX() {
@@ -54,11 +51,11 @@ public class Point {
         this.creationDateString = creationDateString;
     }
 
-    public long getWorkingTime() {
+    public String getWorkingTime() {
         return workingTime;
     }
 
-    public void setWorkingTime(long workingTime) {
+    public void setWorkingTime(String workingTime) {
         this.workingTime = workingTime;
     }
 
@@ -70,6 +67,14 @@ public class Point {
         this.result = result;
     }
 
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,22 +82,24 @@ public class Point {
 
         Point point = (Point) o;
 
-        if (Float.compare(point.x, x) != 0) return false;
+        if (x != point.x) return false;
         if (Float.compare(point.y, y) != 0) return false;
         if (r != point.r) return false;
-        if (workingTime != point.workingTime) return false;
+        if (!workingTime.equals(point.workingTime)) return false;
         if (result != point.result) return false;
+        if (correct != point.correct) return false;
         return creationDateString.equals(point.creationDateString);
     }
 
     @Override
     public int hashCode() {
-        int result1 = (x != +0.0f ? Float.floatToIntBits(x) : 0);
+        int result1 = x;
         result1 = 31 * result1 + (y != +0.0f ? Float.floatToIntBits(y) : 0);
         result1 = 31 * result1 + r;
         result1 = 31 * result1 + creationDateString.hashCode();
-        result1 = 31 * result1 + (int) (workingTime ^ (workingTime >>> 32));
+        result1 = 31 * result1 + workingTime.hashCode();
         result1 = 31 * result1 + (result ? 1 : 0);
+        result1 = 31 * result1 + (correct ? 1 : 0);
         return result1;
     }
 
@@ -105,6 +112,7 @@ public class Point {
                 ", creationDateString='" + creationDateString + '\'' +
                 ", workingTime=" + workingTime +
                 ", result=" + result +
+                ", correct=" + correct +
                 '}';
     }
 }

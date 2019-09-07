@@ -1,6 +1,51 @@
 package app.servlets;
 
-import javax.servlet.http.HttpServlet;
+import app.entities.Point;
+import app.model.Results;
 
-public class AreaCheckServlet extends HttpServlet {
+import static java.lang.Math.pow;
+
+public class AreaCheckServlet {
+
+    void initPoint(Point point, String x, String y, String r) {
+        if (validate(point, x, y, r)) {
+            pointIn(point);
+        }
+    }
+
+    private boolean validate(Point point, String x, String y, String r) {
+        try {
+            int ix = Integer.parseInt(x);
+            float fy = Float.parseFloat(y);
+            int ir = Integer.parseInt(r);
+            point.setX(ix);
+            point.setY(fy);
+            point.setR(ir);
+            point.setCorrect(true);
+            return true;
+        } catch (IllegalArgumentException e) {
+            point.setCorrect(false);
+            return false;
+        }
+    }
+
+    private boolean pointIn(Point point) {
+        float x = (float) point.getX();
+        float y = point.getY();
+        float r = (float) point.getR();
+        point.setResult(true);
+        if ((x >= 0) && (y >= 0) && (x <= r / 2) && (y <= r)) {
+            return true;
+        } else if ((x <= 0) && (y >= 0) && (pow(x, 2) + pow(y, 2) <= pow(r / 2, 2))) {
+            return true;
+        } else if ((x <= 0) && (y <= 0) && (y >= -2 * x - r)) {
+            return true;
+        }
+        point.setResult(false);
+        return false;
+    }
+
+    public String resultString() {
+        return Results.getInstance().list();
+    }
 }
