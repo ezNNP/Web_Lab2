@@ -38,7 +38,7 @@ public class Results {
         for (int i = points.size() - 1; i >= 0; i--) {
             current = points.get(i);
             if (current.isCorrect()) {
-                int x = current.getX();
+                float x = current.getX();
                 float y = current.getY();
                 int r = current.getR();
                 String creationDateString = current.getCreationDateString();

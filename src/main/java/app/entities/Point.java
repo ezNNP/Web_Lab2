@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Point implements Serializable {
-    private int x;
+    private float x;
     private float y;
     private int r;
     private String creationDateString; // дата создания точки
@@ -19,11 +19,11 @@ public class Point implements Serializable {
         this.creationDateString = simpleDateFormat.format(date);
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
@@ -82,22 +82,23 @@ public class Point implements Serializable {
 
         Point point = (Point) o;
 
-        if (x != point.x) return false;
+        if (Float.compare(point.x, x) != 0) return false;
         if (Float.compare(point.y, y) != 0) return false;
         if (r != point.r) return false;
-        if (!workingTime.equals(point.workingTime)) return false;
         if (result != point.result) return false;
         if (correct != point.correct) return false;
-        return creationDateString.equals(point.creationDateString);
+        if (creationDateString != null ? !creationDateString.equals(point.creationDateString) : point.creationDateString != null)
+            return false;
+        return workingTime != null ? workingTime.equals(point.workingTime) : point.workingTime == null;
     }
 
     @Override
     public int hashCode() {
-        int result1 = x;
+        int result1 = (x != +0.0f ? Float.floatToIntBits(x) : 0);
         result1 = 31 * result1 + (y != +0.0f ? Float.floatToIntBits(y) : 0);
         result1 = 31 * result1 + r;
-        result1 = 31 * result1 + creationDateString.hashCode();
-        result1 = 31 * result1 + workingTime.hashCode();
+        result1 = 31 * result1 + (creationDateString != null ? creationDateString.hashCode() : 0);
+        result1 = 31 * result1 + (workingTime != null ? workingTime.hashCode() : 0);
         result1 = 31 * result1 + (result ? 1 : 0);
         result1 = 31 * result1 + (correct ? 1 : 0);
         return result1;

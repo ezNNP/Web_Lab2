@@ -15,12 +15,15 @@ public class AreaCheckServlet {
 
     private boolean validate(Point point, String x, String y, String r) {
         try {
-            int ix = Integer.parseInt(x);
+            float ix = Float.parseFloat(x);
             float fy = Float.parseFloat(y);
             int ir = Integer.parseInt(r);
             point.setX(ix);
             point.setY(fy);
             point.setR(ir);
+            if (ix < -5 || ix > 5 || fy <= -5 || fy >= 3 || ir < 1 || ir > 5) {
+                throw new IllegalArgumentException();
+            }
             point.setCorrect(true);
             return true;
         } catch (IllegalArgumentException e) {
@@ -30,7 +33,7 @@ public class AreaCheckServlet {
     }
 
     private boolean pointIn(Point point) {
-        float x = (float) point.getX();
+        float x = point.getX();
         float y = point.getY();
         float r = (float) point.getR();
         point.setResult(true);

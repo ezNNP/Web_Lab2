@@ -7,13 +7,21 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-  // add refresh (Results.getInstance().clearList();)
-  // add clicking on canvas with R
+  try {
+    int i = Integer.parseInt(request.getParameter("ref"));
+    if (i == 1) {
+      Results.getInstance().clearList();
+    } else {
+      throw new Exception();
+    }
+  } catch (Exception e) {}
+
+  // create flag to understand if it is a click request or not
 %>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Лаба 1</title>
+  <title>Лаба 2</title>
   <!-- Подключение css -->
   <link href="css/style.css" rel="stylesheet">
   <link href="css/result.css" rel="stylesheet">
@@ -72,5 +80,6 @@
   <a href="index.jsp?ref=1">Начать заново</a>
 </div>
 </div>
+<script type="text/javascript" src="js/mouse_handler.js"></script>
 </body>
 </html>

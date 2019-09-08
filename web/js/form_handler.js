@@ -2,6 +2,7 @@ let validX, validY, validR = false;
 
 let gl_x = 0;
 let gl_y = 0;
+let gl_r = 0;
 let ord = 0;
 
 function cl() {
@@ -37,6 +38,7 @@ function chooseR(r) {
 
     let field = document.getElementById("R_input");
     field.value = r;
+    gl_r = r;
     ord = 120 / r;
 
     enable_button();
