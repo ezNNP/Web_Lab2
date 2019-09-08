@@ -11,6 +11,7 @@
     int i = Integer.parseInt(request.getParameter("ref"));
     if (i == 1) {
       Results.getInstance().clearList();
+      response.sendRedirect("index.jsp");
     } else {
       throw new Exception();
     }
