@@ -14,10 +14,6 @@ public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // validation of x, y, r
-        // create date of start (for working time)
-        // if everything is correct then go to area check servlet
-        // else add to model that arguments are wrong
         super.doPost(req, resp);
     }
 
@@ -25,12 +21,18 @@ public class ControllerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long start = System.nanoTime(); // время начала работы скрипта
         resp.setContentType("text/html");
-        if (req.getParameter("r") == null) {
-            // r is not valid
-        }
 
         AreaCheckServlet areaCheckServlet = new AreaCheckServlet();
         Point point = new Point(); // point creation
+        try {
+            if (req.getParameter("click").equals("true")) {
+                point.setByClick(true);
+            } else {
+                point.setByClick(false);
+            }
+        } catch (NullPointerException e) {
+            point.setByClick(false);
+        }
         areaCheckServlet.initPoint(point, req.getParameter("x"), req.getParameter("y").replace(',', '.'), req.getParameter("r"));
         Results.getInstance().add(point);
 

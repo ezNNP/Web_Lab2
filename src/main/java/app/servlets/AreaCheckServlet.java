@@ -21,6 +21,13 @@ public class AreaCheckServlet {
             point.setX(ix);
             point.setY(fy);
             point.setR(ir);
+            if (point.isByClick() && ir >= 1 && ir <= 5) { // if point is setted by click then we won't check that for x and y parameters
+                point.setCorrect(true);
+                return true;
+            } else if (point.isByClick()) {
+                point.setCorrect(false);
+                return false;
+            }
             if (ix < -5 || ix > 5 || fy <= -5 || fy >= 3 || ir < 1 || ir > 5) {
                 throw new IllegalArgumentException();
             }

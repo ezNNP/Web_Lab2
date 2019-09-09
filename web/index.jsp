@@ -16,8 +16,6 @@
       throw new Exception();
     }
   } catch (Exception e) {}
-
-  // create flag to understand if it is a click request or not
 %>
 <html lang="ru">
 <head>

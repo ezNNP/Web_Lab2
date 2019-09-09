@@ -25,7 +25,7 @@ function getMousePosition(canvas, evt) {
 function sendRequest() {
     let http = new XMLHttpRequest();
     let url = "controller";
-    let params = "x="+gl_x.toFixed(2)+"&y="+gl_y.toFixed(2)+"&r="+gl_r;
+    let params = "x="+gl_x.toFixed(2)+"&y="+gl_y.toFixed(2)+"&r="+gl_r+"&click=true";
     http.open('POST', url);
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 

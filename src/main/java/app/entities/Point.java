@@ -12,6 +12,7 @@ public class Point implements Serializable {
     private String workingTime; // время работы
     private boolean result; // реузльтат | true - точка попала в область | false - не попала
     private boolean correct; // корректно ли были заданы значения для точки
+    private boolean byClick;
 
     public Point() {
         Date date = new Date();
@@ -75,6 +76,14 @@ public class Point implements Serializable {
         this.correct = correct;
     }
 
+    public boolean isByClick() {
+        return byClick;
+    }
+
+    public void setByClick(boolean byClick) {
+        this.byClick = byClick;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,6 +96,7 @@ public class Point implements Serializable {
         if (r != point.r) return false;
         if (result != point.result) return false;
         if (correct != point.correct) return false;
+        if (byClick != point.byClick) return false;
         if (creationDateString != null ? !creationDateString.equals(point.creationDateString) : point.creationDateString != null)
             return false;
         return workingTime != null ? workingTime.equals(point.workingTime) : point.workingTime == null;
@@ -101,6 +111,7 @@ public class Point implements Serializable {
         result1 = 31 * result1 + (workingTime != null ? workingTime.hashCode() : 0);
         result1 = 31 * result1 + (result ? 1 : 0);
         result1 = 31 * result1 + (correct ? 1 : 0);
+        result1 = 31 * result1 + (byClick ? 1 : 0);
         return result1;
     }
 
