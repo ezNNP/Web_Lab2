@@ -95,3 +95,7 @@ body {
 iframe {
     width: 600px;
 }
+
+#alerts {
+    color: orangered;
+}

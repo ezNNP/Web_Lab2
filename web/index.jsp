@@ -73,6 +73,7 @@
       <button type="submit" id="submit" disabled onclick="drawPoint(); showResult(); resizeIframe()">Чекнуть</button>
     </form>
     <canvas width="300" height="300" id="canvas"></canvas>
+    <p id="alerts"></p>
   </div>
   <div id="result" class="block <% if (Results.getInstance().listSize() == 0) { out.print("hidden"); }%>">
   <iframe src="result.jsp" name="result" frameBorder="0" seamless scrolling="no" id="iframe"></iframe>

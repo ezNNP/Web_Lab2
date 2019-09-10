@@ -41,6 +41,8 @@ function chooseR(r) {
     gl_r = r;
     ord = 120 / r;
 
+    document.getElementById("alerts").innerText = "";
+
     enable_button();
 }
 

@@ -2,15 +2,17 @@ let canvas = document.getElementById("canvas");
 
 canvas.addEventListener("mousedown", function(evt) {
     let mousePosition = getMousePosition(canvas, evt);
-    if (ord != 0) {
-        gl_x = (mousePosition.x-150) / ord;
+    let alerts = document.getElementById("alerts");
+    if (ord != 0 && !isNaN(ord)) {
+        gl_x = (mousePosition.x - 150) / ord;
         gl_y = (150 - mousePosition.y) / ord;
         drawPoint();
         sendRequest();
         showResult();
         resizeIframe();
+        alerts.innerText = "";
     } else {
-        alert("R не задано"); // добавить изменение DOM элемента
+        alerts.innerText = "Значение R не задано";
     }
 });
 
