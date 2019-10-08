@@ -26,24 +26,22 @@ function chooseX(x) {
     enable_button();
 }
 
-function chooseR(r) {
-    let buttons = document.getElementById("r_buttons").getElementsByTagName("button");
-    for (let o of buttons) {
-        o.classList.remove("chosen")
+function chooseR(select) {
+    let r = select[select.selectedIndex].value;
+    if (r !== 0) {
+
+        validR = true;
+
+        gl_r = r;
+        ord = 120 / r;
+
+        document.getElementById("alerts").innerText = "";
+
+        enable_button();
+    } else {
+        validR = false;
+        enable_button();
     }
-
-    let button = document.getElementById("r" + r);
-    button.classList.add("chosen");
-    validR = true;
-
-    let field = document.getElementById("R_input");
-    field.value = r;
-    gl_r = r;
-    ord = 120 / r;
-
-    document.getElementById("alerts").innerText = "";
-
-    enable_button();
 }
 
 function validateY() {

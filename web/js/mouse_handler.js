@@ -28,7 +28,7 @@ function sendRequest() {
     let http = new XMLHttpRequest();
     let url = "controller";
     let params = "x="+gl_x.toFixed(2)+"&y="+gl_y.toFixed(2)+"&r="+gl_r+"&click=true";
-    http.open('POST', url);
+    http.open('GET', url);
     http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     http.onreadystatechange = function() {//Call a function when the state changes.
@@ -36,6 +36,9 @@ function sendRequest() {
             document.getElementById("iframe").contentDocument.open();
             document.getElementById("iframe").contentDocument.write(http.responseText);
             document.getElementById("iframe").contentDocument.close();
+            console.log(1)
+        } else {
+            console.log(0)
         }
     };
     http.send(params);

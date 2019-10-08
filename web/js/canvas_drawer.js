@@ -7,12 +7,12 @@ function loadCanvas() {
 
     // рисуем фигуры
     context.beginPath();
-    context.arc(150, 150, 60, -Math.PI / 2, Math.PI, true); // круг
+    context.arc(150, 150, 120, Math.PI / 2, Math.PI, false); // круг
     context.lineTo(150, 150);
     context.fill();
-    context.fillRect(150, 150, 60, -120); // прямоугольник
-    context.moveTo(90, 150);
-    context.lineTo(150, 270);
+    context.fillRect(150, 150, -120, -120); // прямоугольник
+    context.moveTo(270, 150);
+    context.lineTo(150, 210);
     context.lineTo(150, 150);
     context.fill();
     context.closePath();

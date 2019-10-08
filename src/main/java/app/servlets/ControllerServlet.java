@@ -16,12 +16,6 @@ public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         HttpSession session = req.getSession();
         if (session.getAttribute("result") == null) {
             Results result = new Results();
@@ -47,5 +41,10 @@ public class ControllerServlet extends HttpServlet {
         ServletContext context = getServletContext();
         RequestDispatcher rd= context.getRequestDispatcher("/areacheck");
         rd.forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doGet(req, resp);
     }
 }

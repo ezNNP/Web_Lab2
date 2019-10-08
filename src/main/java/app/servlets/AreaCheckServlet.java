@@ -18,11 +18,6 @@ public class AreaCheckServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Point point = (Point)req.getAttribute("point");
 
         initPoint(point, req.getParameter("x"), req.getParameter("y").replace(',', '.'), req.getParameter("r"));
@@ -39,6 +34,11 @@ public class AreaCheckServlet extends HttpServlet {
         rd.forward(req, resp);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
+
     private void initPoint(Point point, String x, String y, String r) {
         if (validate(point, x, y, r)) {
             pointIn(point);
@@ -49,18 +49,18 @@ public class AreaCheckServlet extends HttpServlet {
         try {
             float ix = Float.parseFloat(x);
             float fy = Float.parseFloat(y);
-            int ir = Integer.parseInt(r);
+            float ir = Float.parseFloat(r);
             point.setX(ix);
             point.setY(fy);
             point.setR(ir);
-            if (point.isByClick() && ir >= 1 && ir <= 5) { // if point is setted by click then we won't check that for x and y parameters
+            if (point.isByClick() && ir >= 1 && ir <= 3) { // if point is setted by click then we won't check that for x and y parameters
                 point.setCorrect(true);
                 return true;
             } else if (point.isByClick()) {
                 point.setCorrect(false);
                 return false;
             }
-            if (ix < -5 || ix > 5 || fy <= -5 || fy >= 3 || ir < 1 || ir > 5) {
+            if (ix < -5 || ix > 5 || fy <= -5 || fy >= 3 || ir < 1 || ir > 3) {
                 throw new IllegalArgumentException();
             }
             point.setCorrect(true);
@@ -74,15 +74,17 @@ public class AreaCheckServlet extends HttpServlet {
     private boolean pointIn(Point point) {
         float x = point.getX();
         float y = point.getY();
-        float r = (float) point.getR();
+        float r = point.getR();
         point.setResult(true);
-        if ((x >= 0) && (y >= 0) && (x <= r / 2) && (y <= r)) {
+
+        if ((x <= 0) && (y >= 0) && (x <= r) && (y <= r)) {
             return true;
-        } else if ((x <= 0) && (y >= 0) && (pow(x, 2) + pow(y, 2) <= pow(r / 2, 2))) {
+        } else if ((x <= 0) && (y <= 0) && (pow(x, 2) + pow(y, 2) <= pow(r, 2))) {
             return true;
-        } else if ((x <= 0) && (y <= 0) && (y >= -2 * x - r)) {
+        } else if ((x >= 0) && (y <= 0) && (y >= 0.5 * x - r/2)) {
             return true;
         }
+
         point.setResult(false);
         return false;
     }

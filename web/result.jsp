@@ -1,4 +1,3 @@
-<%@ page import="app.entities.Point"%>
 <%--
   Created by IntelliJ IDEA.
   User: grigoriy

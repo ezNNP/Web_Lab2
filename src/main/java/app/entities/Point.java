@@ -7,7 +7,7 @@ import java.util.Date;
 public class Point implements Serializable {
     private float x;
     private float y;
-    private int r;
+    private float r;
     private String creationDateString; // дата создания точки
     private String workingTime; // время работы
     private boolean result; // реузльтат | true - точка попала в область | false - не попала
@@ -36,11 +36,11 @@ public class Point implements Serializable {
         this.y = y;
     }
 
-    public int getR() {
+    public float getR() {
         return r;
     }
 
-    public void setR(int r) {
+    public void setR(float r) {
         this.r = r;
     }
 
@@ -106,7 +106,7 @@ public class Point implements Serializable {
     public int hashCode() {
         int result1 = (x != +0.0f ? Float.floatToIntBits(x) : 0);
         result1 = 31 * result1 + (y != +0.0f ? Float.floatToIntBits(y) : 0);
-        result1 = 31 * result1 + r;
+        result1 = 31 * result1 + (r != +0.0f ? Float.floatToIntBits(r) : 0);
         result1 = 31 * result1 + (creationDateString != null ? creationDateString.hashCode() : 0);
         result1 = 31 * result1 + (workingTime != null ? workingTime.hashCode() : 0);
         result1 = 31 * result1 + (result ? 1 : 0);

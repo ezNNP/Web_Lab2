@@ -35,7 +35,7 @@ public class Results {
             if (current.isCorrect()) {
                 float x = current.getX();
                 float y = current.getY();
-                int r = current.getR();
+                float r = current.getR();
                 String creationDateString = current.getCreationDateString();
                 String workingTime = current.getWorkingTime();
                 boolean result = current.isResult();

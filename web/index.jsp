@@ -1,4 +1,3 @@
-<%@ page import="app.model.Results" %>
 <%--
   Created by IntelliJ IDEA.
   User: grigoriy
@@ -38,11 +37,11 @@
   <div class="header block">
     <h1>Жаворонков Григорий Игоревич</h1>
     <h3>Группа: P3202</h3>
-    <h3>Вариант: 202008</h3>
+    <h3>Вариант: 20214</h3>
   </div>
   <div class="container block">
     <p>Введите X, Y, R в полях ниже и узнайте, попала ли точка в фигуру, сгенерированную генератором генерируемых вариантов</p>
-    <form id="form" action="controller" method="post" target="result">
+    <form id="form" action="controller" method="get" target="result">
       <div id="X" class="prop">
         <span class="property">X</span>
         <span id="x_buttons">
@@ -64,14 +63,14 @@
       </div>
       <div id="R" class="prop">
         <span class="property">R</span>
-        <span id="r_buttons">
-          <button id="r1" type="button" onclick="chooseR(1)">1</button>
-          <button id="r2" type="button" onclick="chooseR(2)">2</button>
-          <button id="r3" type="button" onclick="chooseR(3)">3</button>
-          <button id="r4" type="button" onclick="chooseR(4)">4</button>
-          <button id="r5" type="button" onclick="chooseR(5)">5</button>
-        </span>
-        <input id="R_input" name="r" class="hidden">
+        <select name="r" onchange="chooseR(this)">
+          <option value="0"></option>
+          <option value="1">1</option>
+          <option value="1.5">1.5</option>
+          <option value="2">2</option>
+          <option value="2.5">2.5</option>
+          <option value="3">3</option>
+        </select>
       </div>
       <button type="submit" id="submit" disabled onclick="drawPoint(); showResult(); resizeIframe()">Чекнуть</button>
     </form>
