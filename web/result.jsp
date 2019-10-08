@@ -1,6 +1,4 @@
-<%@ page import="app.servlets.AreaCheckServlet" %>
 <%@ page import="app.entities.Point"%>
-<%@ page import="app.model.Results" %>
 <%--
   Created by IntelliJ IDEA.
   User: grigoriy
@@ -15,22 +13,7 @@
     <link href="css/result.css" rel="stylesheet">
 </head>
 <body>
-<%
-    try {
-        AreaCheckServlet areaCheckServlet = (AreaCheckServlet) request.getAttribute("acs");
-        Point point = (Point) request.getAttribute("point");
-        long start = (Long) request.getAttribute("start");
-        long finish = System.nanoTime();
-        point.setWorkingTime((finish - start) / 1000000 + "," + (finish - start) % 1000000 + " мс");
-        out.flush();
-        out.print(areaCheckServlet.resultString());
-        out.close();
-    } catch (NullPointerException e) {
-        out.flush();
-        out.print(Results.getInstance().list());
-        out.close();
-    }
-
-%>
+<jsp:useBean id="result" class="app.model.Results" scope="session"/>
+<% out.print(result.list()); %>
 </body>
 </html>

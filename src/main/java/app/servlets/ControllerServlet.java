@@ -4,10 +4,12 @@ import app.entities.Point;
 import app.model.Results;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ControllerServlet extends HttpServlet {
@@ -19,10 +21,15 @@ public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        HttpSession session = req.getSession();
+        if (session.getAttribute("result") == null) {
+            Results result = new Results();
+            session.setAttribute("result", result);
+        }
         long start = System.nanoTime(); // время начала работы скрипта
         resp.setContentType("text/html");
 
-        AreaCheckServlet areaCheckServlet = new AreaCheckServlet();
         Point point = new Point(); // point creation
         try {
             if (req.getParameter("click").equals("true")) {
@@ -33,14 +40,12 @@ public class ControllerServlet extends HttpServlet {
         } catch (NullPointerException e) {
             point.setByClick(false);
         }
-        areaCheckServlet.initPoint(point, req.getParameter("x"), req.getParameter("y").replace(',', '.'), req.getParameter("r"));
-        Results.getInstance().add(point);
 
-        req.setAttribute("acs", areaCheckServlet);
         req.setAttribute("point", point);
         req.setAttribute("start", start);
 
-        RequestDispatcher rd = req.getRequestDispatcher("result.jsp");
+        ServletContext context = getServletContext();
+        RequestDispatcher rd= context.getRequestDispatcher("/areacheck");
         rd.forward(req, resp);
     }
 }

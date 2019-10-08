@@ -1,4 +1,5 @@
-<%@ page import="app.model.Results" %><%--
+<%@ page import="app.model.Results" %>
+<%--
   Created by IntelliJ IDEA.
   User: grigoriy
   Date: 2019-09-06
@@ -6,11 +7,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="result" class="app.model.Results" scope="session"/>
 <%
+  int listSize = result.listSize();
   try {
     int i = Integer.parseInt(request.getParameter("ref"));
     if (i == 1) {
-      Results.getInstance().clearList();
+      result.clearList();
       response.sendRedirect("index.jsp");
     } else {
       throw new Exception();
@@ -29,7 +32,7 @@
   <script type="text/javascript" src="js/result_shower.js"></script>
   <script type="text/javascript" src="js/canvas_drawer.js"></script>
 </head>
-<body onload="cl(); loadCanvas(); validateCounter(<% out.print(Results.getInstance().listSize() + 2); %>); resizeIframe()">
+<body onload="cl(); loadCanvas(); validateCounter(<% out.print(listSize + 2); %>); resizeIframe()">
 <!-- Шапка -->
 <div class="content">
   <div class="header block">
@@ -75,8 +78,8 @@
     <canvas width="300" height="300" id="canvas"></canvas>
     <p id="alerts"></p>
   </div>
-  <div id="result" class="block <% if (Results.getInstance().listSize() == 0) { out.print("hidden"); }%>">
-  <iframe src="result.jsp" name="result" frameBorder="0" seamless scrolling="no" id="iframe"></iframe>
+  <div id="result" class="block <% if (listSize == 0) { out.print("hidden"); }%>">
+  <iframe src="result.jsp" name="result" frameBorder="0" seamless  id="iframe"></iframe>
   <a href="index.jsp?ref=1">Начать заново</a>
 </div>
 </div>

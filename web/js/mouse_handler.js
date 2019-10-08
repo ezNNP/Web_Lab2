@@ -3,7 +3,7 @@ let canvas = document.getElementById("canvas");
 canvas.addEventListener("mousedown", function(evt) {
     let mousePosition = getMousePosition(canvas, evt);
     let alerts = document.getElementById("alerts");
-    if (ord != 0 && !isNaN(ord)) {
+    if (ord !== 0 && !isNaN(ord)) {
         gl_x = (mousePosition.x - 150) / ord;
         gl_y = (150 - mousePosition.y) / ord;
         drawPoint();

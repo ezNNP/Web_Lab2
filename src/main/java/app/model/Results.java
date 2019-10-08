@@ -6,14 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Results {
-    private static Results instance = new Results();
     private List<Point> points;
 
-    public static Results getInstance() {
-        return instance;
-    }
-
-    private Results() {
+    public Results() {
         points = new ArrayList<Point>();
     }
 
@@ -71,8 +66,16 @@ public class Results {
                 res.append("<tr><td colspan='6'><b>Неверные аргументы</b></td></tr>");
             }
         }
+        res.append("</body>");
 
         return res.toString();
     }
 
+    public List<Point> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
 }

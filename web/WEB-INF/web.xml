@@ -11,4 +11,13 @@
         <servlet-name>controller</servlet-name>
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>areacheck</servlet-name>
+        <servlet-class>app.servlets.AreaCheckServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>areacheck</servlet-name>
+        <url-pattern>/areacheck</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -3,11 +3,43 @@ package app.servlets;
 import app.entities.Point;
 import app.model.Results;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
+
 import static java.lang.Math.pow;
 
-public class AreaCheckServlet {
+public class AreaCheckServlet extends HttpServlet {
 
-    void initPoint(Point point, String x, String y, String r) {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPost(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Point point = (Point)req.getAttribute("point");
+
+        initPoint(point, req.getParameter("x"), req.getParameter("y").replace(',', '.'), req.getParameter("r"));
+
+        HttpSession session = req.getSession();
+        long start = (Long) req.getAttribute("start");
+        Results result = (Results)session.getAttribute("result");
+        long finish = System.nanoTime();
+        point.setWorkingTime((finish - start) / 1000000 + "," + (finish - start) % 1000000 + " мс");
+
+        result.add(point);
+
+        RequestDispatcher rd = req.getRequestDispatcher("result.jsp");
+        rd.forward(req, resp);
+    }
+
+    private void initPoint(Point point, String x, String y, String r) {
         if (validate(point, x, y, r)) {
             pointIn(point);
         }
@@ -53,9 +85,5 @@ public class AreaCheckServlet {
         }
         point.setResult(false);
         return false;
-    }
-
-    public String resultString() {
-        return Results.getInstance().list();
     }
 }
