@@ -6,7 +6,6 @@ canvas.addEventListener("mousedown", function(evt) {
     if (ord !== 0 && !isNaN(ord)) {
         gl_x = (mousePosition.x - 150) / ord;
         gl_y = (150 - mousePosition.y) / ord;
-        drawPoint();
         sendRequest();
         showResult();
         resizeIframe();

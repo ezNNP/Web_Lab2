@@ -1,4 +1,4 @@
-<%--
+<%@ page import="app.entities.Point" %><%--
   Created by IntelliJ IDEA.
   User: grigoriy
   Date: 2019-09-06
@@ -9,7 +9,14 @@
 <jsp:useBean id="result" class="app.model.Results" scope="session"/>
 <%
   int listSize = result.listSize();
+  float x = 100, y = 100, r = 1;
   try {
+    if (result.getPoints().size() > 0) {
+      Point last = result.getPoints().get(result.getPoints().size() - 1);
+      x = last.getX();
+      y = last.getY();
+      r = last.getR();
+    }
     int i = Integer.parseInt(request.getParameter("ref"));
     if (i == 1) {
       result.clearList();
@@ -30,8 +37,17 @@
   <script type="text/javascript" src="js/form_handler.js"></script>
   <script type="text/javascript" src="js/result_shower.js"></script>
   <script type="text/javascript" src="js/canvas_drawer.js"></script>
+  <script>
+    function drawLastPoint() {
+      gl_x = <%= x %>;
+      gl_y = <%= y %>;
+      gl_r = <%= r %>;
+      ord = 120 / gl_r;
+      drawPoint();
+    }
+  </script>
 </head>
-<body onload="cl(); loadCanvas(); validateCounter(<% out.print(listSize + 2); %>); resizeIframe()">
+<body onload="cl(); loadCanvas(); validateCounter(<% out.print(listSize + 2); %>); resizeIframe(); drawLastPoint()">
 <!-- Шапка -->
 <div class="content">
   <div class="header block">
@@ -78,7 +94,7 @@
           <option value="3">3</option>
         </select>
       </div>
-      <button type="submit" id="submit" disabled onclick="updateValues(); drawPoint(); showResult(); resizeIframe()">Чекнуть</button>
+      <button type="submit" id="submit" disabled onclick="showResult(); resizeIframe()">Чекнуть</button>
     </form>
     <canvas width="300" height="300" id="canvas"></canvas>
     <p id="alerts"></p>
