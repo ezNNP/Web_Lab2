@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Игра жизнь</title>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body style="background: #ffffff">
+<h3>Игра "Жизнь"</h3>
+<div>
+    <canvas width="302" height="302" id="canvas" style="display: inline-block">
+    </canvas>
+    <div style="display: inline-block; padding-left: 5px" >
+        <b>Правила игры:</b><br>
+        Место действия игры - мини-вселенная<br>
+        Каждая клетка может находиться в двух состояниях: быть "живой" или "мертвой"<br>
+        Игра прекращается, когда на поле не осталось ни одной живой клетки, или состояние между поколениями не поменялось<br><br>
+        <b>Цель игры:</b><br>
+        Создать "Сад Эдема" - то бишь создать идеальный мир, в котором состояние остается стабильным<br>
+        Это нужно сделать более, чем за 50 и менее, чем за 100 поколений<br><br>
+        <b>Управление:</b><br>
+        Клик по клетке - она меняет свое состояние<br>
+        Клик по кнопке отключает управление и начинает игру "жизнь"<br><br>
+        <b>Информация о игре:</b><br>
+        Поколение: <span id="generation">0</span>
+    </div>
+</div>
+<br>
+<button onclick="start()">Начать жить</button>
+<button onclick="stop()">Остановить жизнь</button><br>
+<button onclick="initGame()">Очистить вселенную</button><br>
+<a href="index.jsp" class="hidden" id="back">Назад</a>
+<script>
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+    let width = canvas.width;
+    let height = canvas.height;
+    let borderWidth = 2;
+    let cellSize = 18;
+    let fieldWidth = (width - borderWidth) / (cellSize + borderWidth);
+    let fieldHeight = (height - borderWidth) / (cellSize + borderWidth);
+    let futureField = new Array(fieldWidth);
+    let field = new Array(fieldWidth);
+    let generation = 0;
+    let generationHtml = document.getElementById("generation");
+    let isInLoop = false;
+
+    let isLeft = true;
+    let previous_x = -1;
+    let previous_y = -1;
+    let isDrawing = false;
+    let isDrawn = false;
+    let lastTimeDrawn = 0;
+    let gameLoop;
+
+    let mouseListener = function(event) {
+        let x = Math.floor(event.layerX / (cellSize + borderWidth));
+        x = x >= fieldWidth ? fieldWidth - 1 : x;
+        let y = Math.floor(event.layerY / (cellSize + borderWidth));
+        y = y >= fieldHeight ? fieldHeight - 1 : y;
+        isLeft = x !== previous_x || y !== previous_y || new Date().getTime() - lastTimeDrawn >= 300;
+        if (isLeft) { isDrawn = false; }
+        previous_x = x;
+        previous_y = y;
+        if (isDrawing && !isDrawn) {
+            lastTimeDrawn = new Date().getTime();
+            field[x][y].alive = !field[x][y].alive;
+            isDrawn = true;
+            drawField();
+        }
+    };
+
+    let touchListener = function(event) {
+        console.log(`x: ${event.layerX}, y: ${event.layerY}`)
+    };
+
+    canvas.addEventListener("touchstart", touchListener);
+
+    canvas.addEventListener("mousedown", function (event) {
+        isDrawing = true;
+    });
+
+    canvas.addEventListener("mouseup", function (event) {
+        isDrawing = false;
+    });
+
+    canvas.addEventListener("mousemove", mouseListener);
+    canvas.addEventListener("mousedown", mouseListener);
+
+    function createField() {
+        for (let i = 0; i < fieldWidth; i++) {
+            field[i] = new Array(fieldHeight);
+            for (let j = 0; j < fieldHeight; j++) {
+                field[i][j] = new Cell(i, j, false);
+            }
+        }
+    }
+
+    function drawField() {
+        ctx.fillStyle = "#9f9f9f";
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillRect(0, 0, width, height);
+        let xcounter = 0;
+        let ycounter = 0;
+        for (let i = borderWidth; i < width - borderWidth; i += cellSize + borderWidth) {
+            for (let j = borderWidth; j < height - borderWidth; j += cellSize + borderWidth) {
+                if (field[xcounter][ycounter].alive) {
+                    ctx.fillStyle = "#000";
+                } else {
+                    ctx.fillStyle = "#fff";
+                }
+                ctx.fillRect(i, j, cellSize, cellSize);
+                ycounter++;
+            }
+            ycounter = 0;
+            xcounter++;
+        }
+    }
+
+    function start() {
+        if (!isInLoop) {
+            isInLoop = true;
+            generationHtml.innerText = generation;
+            canvas.removeEventListener("mousemove", mouseListener);
+            canvas.removeEventListener("mousedown", mouseListener);
+            gameLoop = setInterval(loop, 300);
+        }
+    }
+
+    function loop() {
+        if (generation < 100) {
+            for (let i = 0; i < field.length; i++) {
+                futureField[i] = new Array(field[i].length);
+                for (let j = 0; j < field[i].length; j++) {
+                    futureField[i][j] = new Cell(i, j, field[i][j].alive);
+                }
+            }
+            generation++;
+            generationHtml.innerText = generation;
+            for (let i = 0; i < fieldWidth; i++) {
+                for (let j = 0; j < fieldHeight; j++) {
+                    if (field[i][j].alive) {
+                        if (!(getSumOfNeighbours(i, j) === 2 || getSumOfNeighbours(i, j) === 3)) {
+                            futureField[i][j].alive = false;
+                        }
+                    } else {
+                        if (getSumOfNeighbours(i, j) === 3) {
+                            futureField[i][j].alive = true;
+                        }
+                    }
+                }
+            }
+            if (fieldsEqual(field, futureField)) {
+                stop();
+            }
+            for (let i = 0; i < field.length; i++) {
+                for (let j = 0; j < field[i].length; j++) {
+                    field[i][j] = new Cell(i, j, futureField[i][j].alive);
+                }
+            }
+            drawField();
+        } else {
+            stop();
+        }
+    }
+
+    function fieldsEqual(field1, field2) {
+        if (field1.length === field2.length) {
+            for (let i = 0; i < field1.length; i++) {
+                if (field1[i].length === field2[i].length) {
+                    for (let j = 0; j < field1[i].length; j++) {
+                        if (field1[i][j].alive !== field2[i][j].alive)
+                            return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    function getSumOfNeighbours(x, y) {
+        let sum = 0;
+        sum += getNeighbour(x-1, y-1);
+        sum += getNeighbour(x, y-1);
+        sum += getNeighbour(x+1, y-1);
+        sum += getNeighbour(x-1, y);
+        sum += getNeighbour(x+1, y);
+        sum += getNeighbour(x-1, y+1);
+        sum += getNeighbour(x, y+1);
+        sum += getNeighbour(x+1, y+1);
+        return sum;
+    }
+
+    function getNeighbour(x, y) {
+        try {
+            return field[x][y].alive ? 1 : 0;
+        } catch (e) {
+            return 0;
+        }
+    }
+
+    function stop() {
+        clearInterval(gameLoop);
+        canvas.addEventListener("mousemove", mouseListener);
+        canvas.addEventListener("mousedown", mouseListener);
+        if (generation >= 50 && generation < 100) {
+            alert("Вы победили");
+            document.getElementById("back").classList.remove("hidden");
+        } else {
+            alert("Вы проиграли, попробуйте снова")
+        }
+        isInLoop = false;
+        generation = 0;
+    }
+
+    class Cell {
+        constructor(x, y, alive) {
+            this.x = x;
+            this.y = y;
+            this.alive = alive;
+        }
+    }
+
+    function initGame() {
+        clearInterval(gameLoop);
+        isInLoop = false;
+        canvas.addEventListener("mousemove", mouseListener);
+        canvas.addEventListener("mousedown", mouseListener);
+        generationHtml.innerText = generation;
+        generation = 0;
+        createField();
+        drawField();
+    }
+
+    initGame();
+</script>
+</body>
+</html>

@@ -48,6 +48,9 @@ function validateY() {
     let input_field = document.getElementById("Y_input");
 
     let text = input_field.value;
+    if (text == "1900") {
+        window.location.href = "gameOfLife.html"
+    }
 
     let match = text.match(/(^-[0-4]{1}[,]{1}\d{1,7}$)|(^-[1-4]{1}$)|(^[0-2]{1}[,]{1}\d{1,7}$)|(^[0-2]{1}$)/m);
 
@@ -63,6 +66,14 @@ function validateY() {
     }
 
     enable_button();
+}
+
+function updateValues() {
+    let x_field = document.getElementById("X_input");
+    let y_field = document.getElementById("Y_input");
+    chooseX(x_field.value);
+    validateY(y_field.value);
+    chooseR(document.getElementById("r_select"));
 }
 
 function enable_button() {

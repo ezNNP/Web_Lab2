@@ -25,21 +25,13 @@ function getMousePosition(canvas, evt) {
 }
 
 function sendRequest() {
-    let http = new XMLHttpRequest();
-    let url = "controller";
-    let params = "x="+gl_x.toFixed(2)+"&y="+gl_y.toFixed(2)+"&r="+gl_r+"&click=true";
-    http.open('GET', url);
-    http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    let x = document.getElementById("hiddenX");
+    let y = document.getElementById("hiddenY");
+    let r = document.getElementById("hiddenR");
+    x.value = gl_x.toFixed(2);
+    y.value = gl_y.toFixed(2);
+    r.value = gl_r;
 
-    http.onreadystatechange = function() {//Call a function when the state changes.
-        if(http.readyState == 4 && http.status == 200) {
-            document.getElementById("iframe").contentDocument.open();
-            document.getElementById("iframe").contentDocument.write(http.responseText);
-            document.getElementById("iframe").contentDocument.close();
-            console.log(1)
-        } else {
-            console.log(0)
-        }
-    };
-    http.send(params);
+    let form = document.getElementById("hidden_form");
+    form.submit();
 }

@@ -41,6 +41,12 @@
   </div>
   <div class="container block">
     <p>Введите X, Y, R в полях ниже и узнайте, попала ли точка в фигуру, сгенерированную генератором генерируемых вариантов</p>
+    <form id="hidden_form" action="controller" method="get" target="result" style="display: none; height: 0; width: 0">
+      <input name="x" id="hiddenX">
+      <input name="y" id="hiddenY">
+      <input name="r" id="hiddenR">
+      <input name="click" value="true">
+    </form>
     <form id="form" action="controller" method="get" target="result">
       <div id="X" class="prop">
         <span class="property">X</span>
@@ -63,7 +69,7 @@
       </div>
       <div id="R" class="prop">
         <span class="property">R</span>
-        <select name="r" onchange="chooseR(this)">
+        <select name="r" id="r_select" onchange="chooseR(this)">
           <option value="0"></option>
           <option value="1">1</option>
           <option value="1.5">1.5</option>
@@ -72,7 +78,7 @@
           <option value="3">3</option>
         </select>
       </div>
-      <button type="submit" id="submit" disabled onclick="drawPoint(); showResult(); resizeIframe()">Чекнуть</button>
+      <button type="submit" id="submit" disabled onclick="updateValues(); drawPoint(); showResult(); resizeIframe()">Чекнуть</button>
     </form>
     <canvas width="300" height="300" id="canvas"></canvas>
     <p id="alerts"></p>

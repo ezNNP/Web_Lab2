@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static java.lang.Math.pow;
+import static java.lang.Math.abs;
 
 public class AreaCheckServlet extends HttpServlet {
 
@@ -36,7 +37,7 @@ public class AreaCheckServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        doPost(req, resp);
     }
 
     private void initPoint(Point point, String x, String y, String r) {
@@ -77,7 +78,7 @@ public class AreaCheckServlet extends HttpServlet {
         float r = point.getR();
         point.setResult(true);
 
-        if ((x <= 0) && (y >= 0) && (x <= r) && (y <= r)) {
+        if ((x <= 0) && (y >= 0) && (abs(x) <= r) && (y <= r)) {
             return true;
         } else if ((x <= 0) && (y <= 0) && (pow(x, 2) + pow(y, 2) <= pow(r, 2))) {
             return true;
