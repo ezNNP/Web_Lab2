@@ -98,7 +98,7 @@
           <option value="3">3</option>
         </select>
       </div>
-      <button type="submit" id="submit" disabled onclick="showResult(); resizeIframe()">Чекнуть</button>
+      <button type="submit" id="submit" disabled onclick="updateValues(); showResult(); resizeIframe()">Чекнуть</button>
     </form>
     <canvas width="300" height="300" id="canvas"></canvas>
     <p id="alerts"></p>
