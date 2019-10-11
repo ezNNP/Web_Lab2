@@ -14,11 +14,14 @@
 <body>
 <jsp:useBean id="result" class="app.model.Results" scope="session"/>
 <%
-    Point last = result.getPoints().get(result.getPoints().size()-1);
-    float x = last.getX();
-    float y = last.getY();
-    float r = last.getR();
-    out.print(result.list());
+    float x = 100, y = 100, r = 1;
+    if (result.getPoints().size() > 0) {
+        Point last = result.getPoints().get(result.getPoints().size() - 1);
+         x = last.getX();
+         y = last.getY();
+         r = last.getR();
+        out.print(result.list());
+    }
 %>
 <script>
     gl_x = <%= x %>;
@@ -26,6 +29,9 @@
     gl_r = <%= r %>;
     ord = 120 / gl_r;
     parent.drawPoint();
+    gl_x = 0;
+    gl_y = 0;
+    gl_r = 0;
 </script>
 </body>
 </html>

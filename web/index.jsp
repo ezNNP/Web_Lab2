@@ -44,6 +44,10 @@
       gl_r = <%= r %>;
       ord = 120 / gl_r;
       drawPoint();
+      gl_x = 0;
+      gl_y = 0;
+      gl_r = 0;
+      ord = 0;
     }
   </script>
 </head>
